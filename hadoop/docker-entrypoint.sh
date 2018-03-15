@@ -13,6 +13,7 @@ if [[ "$(id -u)" = '0' ]]; then
     if [[ ! -z "$cmd" ]]; then
         shift
         set -- su-exec hadoop bin/$cmd --config etc/hadoop "$@"
+        mkdir -p var/tmp/dfs/name
         chown -R hadoop:hadoop var
     fi
 fi

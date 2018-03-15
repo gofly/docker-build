@@ -1,8 +1,8 @@
 FROM openjdk:8-jre-alpine
 ARG HADOOP_VERSION=2.6.0
 ARG CDH_VERSION=5.14.0
-ENV HADOOP_HOME=/hadoop
-ENV PATH=$HADOOP_HOME/bin:$PATH
+ENV HADOOP_HOME /hadoop
+ENV PATH $HADOOP_HOME/bin:$PATH
 RUN apk upgrade --no-cache && \
     apk add --no-cache bash 'su-exec>=0.2' && \
     addgroup -S hadoop && adduser -S -G hadoop hadoop
@@ -27,5 +27,6 @@ RUN apk add --no-cache --virtual .install-deps curl && \
     apk del --purge .install-deps
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
-VOLUME ["/hadoop/etc", "/hadoop/var", "/hadoop/var/tmp"]
+VOLUME ["/hadoop/var"]
+EXPOSE 8019 8020 8030 8031 8032 8033 8040 8041 8042 8088 8480 8485 10020 19888 50010 50020 50070 50075 50470 50475
 ENTRYPOINT ["/docker-entrypoint.sh"]
