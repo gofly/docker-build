@@ -1,8 +1,8 @@
 FROM openjdk:8-jre-alpine
 ARG HADOOP_VERSION=2.6.0
 ARG CDH_VERSION=5.14.0
-ENV HADOOP_HOME=/hadoop \
-    PATH=$HADOOP_HOME/bin:$PATH
+ENV HADOOP_HOME=/hadoop
+ENV PATH=$HADOOP_HOME/bin:$PATH
 RUN apk upgrade --no-cache && \
     apk add --no-cache bash 'su-exec>=0.2' && \
     addgroup -S hadoop && adduser -S -G hadoop hadoop
@@ -20,8 +20,9 @@ RUN apk add --no-cache --virtual .install-deps curl && \
     chmod +x bin/* && \
     mkdir -p var/tmp && \
     chown -R hadoop:hadoop var && \
-    rm -rf /tmp/* bin/*.cmd share/hadoop/mapreduce1 share/hadoop/mapreduce && \
+    rm -rf /tmp/* bin/*.cmd libexec/*.cmd etc/hadoop/*.cmd share/hadoop/mapreduce1 share/hadoop/mapreduce && \
     mv share/hadoop/mapreduce2 share/hadoop/mapreduce && \
+    curl -L https://github.com/gofly/docker-build/releases/download/hadoop-${HADOOP_VERSION}-cdh${CDH_VERSION}/hadoop-native.tar.gz | tar zx -C lib && \
     find ./share -name sources | xargs rm -rf && \
     apk del --purge .install-deps
 COPY docker-entrypoint.sh /

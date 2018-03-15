@@ -5,7 +5,6 @@ if [[ "$(id -u)" = '0' ]]; then
     case "$1" in
     hdfs)
         cmd="$1"
-        mkdir -p var/hdfs/namenode var/hdfs/datanode
         ;;
     hadoop|mapred|rcc|yarn)
         cmd="$1"
