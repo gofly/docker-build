@@ -5,6 +5,11 @@ if [[ "$(id -u)" = '0' ]]; then
     case "$1" in
     hdfs)
         cmd="$1"
+        if [[ ! -d "var/tmp/dfs/name/current"]]; then
+            mkdir -p var/tmp/dfs/name
+            chown -R hadoop:hadoop var/tmp/dfs/name
+            su-exec hadoop bin/hdfs namenode -format
+        fi
         ;;
     hadoop|mapred|rcc|yarn)
         cmd="$1"
@@ -12,9 +17,8 @@ if [[ "$(id -u)" = '0' ]]; then
     esac
     if [[ ! -z "$cmd" ]]; then
         shift
-        set -- su-exec hadoop bin/$cmd --config etc/hadoop "$@"
-        mkdir -p var/tmp/dfs/name
         chown -R hadoop:hadoop var
+        set -- su-exec hadoop bin/$cmd "$@"
     fi
 fi
 
