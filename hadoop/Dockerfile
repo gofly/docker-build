@@ -27,19 +27,19 @@ RUN apk add --no-cache --virtual .install-deps curl && \
     curl -L https://github.com/gofly/docker-build/releases/download/hadoop-${HADOOP_VERSION}-cdh${CDH_VERSION}/hadoop-native.tar.gz | tar zx -C lib && \
     find ./share -name sources | xargs rm -rf && \
     apk del --purge .install-deps
-ENV JVM_OPTS= \
-    JAVA_OPTS= \
-    HADOOP_OPTS= \
-    HADOOP_IDENT_STRING= \
-    HDFS_OPTS= \
-    HADOOP_SECURE_DN= \
-    HADOOP_PRIVILEGED_NFS= \
-    MAPRED_OPTS= \
-    RCC_OPTS= \
-    YARN_OPTS= \
-    YARN_IDENT_STRING= \
-    YARN_USER_CLASSPATH_FIRST= \
-    YARN_USER_CLASSPATH=
+ENV JVM_OPTS="" \
+    JAVA_OPTS="" \
+    HADOOP_OPTS="" \
+    HADOOP_IDENT_STRING="" \
+    HDFS_OPTS="" \
+    HADOOP_SECURE_DN="" \
+    HADOOP_PRIVILEGED_NFS="" \
+    MAPRED_OPTS="" \
+    RCC_OPTS="" \
+    YARN_OPTS="" \
+    YARN_IDENT_STRING="" \
+    YARN_USER_CLASSPATH_FIRST="" \
+    YARN_USER_CLASSPATH=""
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 VOLUME ["/hadoop/var"]
