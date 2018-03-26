@@ -109,10 +109,10 @@ if [[ "$(id -u)" = '0' ]]; then
         case "$COMMAND" in
         'namenode')
             CLASS='org.apache.hadoop.hdfs.server.namenode.NameNode'
-            if [[ ! -d "${HADOOP_HOME}/var/tmp/dfs/name/current" ]]; then
+            if [[ ! -f "${HADOOP_HOME}/var/tmp/dfs/name/current/VERSION" && "$1" != "-format" ]]; then
                 mkdir -p ${HADOOP_HOME}/var/tmp/dfs/name
                 chown -R hadoop:hadoop ${HADOOP_HOME}/var/tmp/dfs/name
-                eval "$@" -format
+                hdfs namenode -format -clusterid "$HDFS_CLUSTER_ID" -nonInteractive
             fi
             ;;
         'secondarynamenode')
@@ -423,20 +423,11 @@ if [[ "$(id -u)" = '0' ]]; then
             ;;
         esac
         ;;
-    *)
-        echo "Usage: COMMAND"
-        echo "where COMMAND is one of:"
-        echo "  hadoop"
-        echo "  hdfs"
-        echo "  mapred"
-        echo "  rcc"
-        echo "  yarn"
-        exit
-        ;;
     esac
-    set -- su-exec hadoop $EXE $JVM_MODE $JVM_OPTS $JAVA_OPTS -cp "$CLASSPATH" $CLASS "$@"
-    #chown -R hadoop:hadoop var
+    if [[ -n "$CLASS" ]]; then
+        set -- su-exec hadoop $EXE $JVM_MODE $JVM_OPTS $JAVA_OPTS -cp "$CLASSPATH" $CLASS "$@"
+    fi
+    chown -R hadoop:hadoop var
 fi
 
 exec "$@"
-

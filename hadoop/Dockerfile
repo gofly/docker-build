@@ -32,6 +32,7 @@ ENV JVM_OPTS="" \
     HADOOP_OPTS="" \
     HADOOP_IDENT_STRING="" \
     HDFS_OPTS="" \
+    HDFS_CLUSTER_ID="default" \
     HADOOP_SECURE_DN="" \
     HADOOP_PRIVILEGED_NFS="" \
     MAPRED_OPTS="" \
