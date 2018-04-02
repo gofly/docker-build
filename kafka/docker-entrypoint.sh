@@ -124,9 +124,12 @@ if [[ "$(id -u)" = '0' ]]; then
             -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent \
             -Djava.awt.headless=true -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps \
             -XX:+PrintGCTimeStamps"
+        if [[ -f "${JVM_CONF:=$KAFKA_HOME/config/jvm.config}" ]]; then
+            JVM_OPTS=$(cat "$JVM_CONF" | xargs)
+        fi
         JAVA_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
-            -Dcom.sun.management.jmxremote.ssl=false -Dkafka.logs.dir=var/logs \
-            -Dlog4j.configuration=file:config/log4j.properties ${JAVA_OPTS}"
+            -Dcom.sun.management.jmxremote.ssl=false -Dkafka.logs.dir=$KAFKA_HOME/var/logs \
+            -Dlog4j.configuration=file:$KAFKA_HOME/config/log4j.properties ${JAVA_OPTS}"
         set -- su-exec kafka java -server $JVM_OPTS $JAVA_OPTS -cp "$KAFKA_HOME/libs/*" $CLASS $ARGS "$@"
     fi
 fi
