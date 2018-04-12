@@ -7,11 +7,12 @@ RUN apk add --no-cache --virtual .install-deps curl && \
     mkdir /tmp/druid /druid && \
     # download druid
     curl -L http://static.druid.io/artifacts/releases/druid-0.12.0-bin.tar.gz | tar zx --strip-components=1 -C /tmp/druid && \
-    for dir in conf lib extensions; do \
-        mv /tmp/druid/$dir /druid; \
-    done && \
+    mv /tmp/druid/conf/druid /druid/conf && \
+    mv /tmp/druid/lib /druid/lib && \
+    mv /tmp/druid/extensions /druid/extensions && \
     rm -rf /tmp/druid && \
     # download hadoop native
+    mkdir -p /druid/lib/native && \
     curl -L https://github.com/gofly/docker-build/releases/download/hadoop-2.7.5/hadoop-native-2.7.5_musl_x86_64.tar.gz | tar zx --strip-components=1 -C /druid/lib/native && \
     # download mysql-metadata-storage
     mkdir -p /druid/extensions/mysql-metadata-storage && \
